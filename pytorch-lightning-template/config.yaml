@@ -1,0 +1,55 @@
+trainer_param:
+  accelerator: gpu
+  strategy: deepspeed_stage_2
+  devices: 4
+  num_nodes: 1
+  precision: bf16
+  logger: True
+  # callbacks:
+  fast_dev_run: 2
+  max_epochs: 100
+  check_val_every_n_epoch: 10
+  log_every_n_steps: 50
+  enable_checkpointing: True
+  deterministic: True
+  default_root_dir: None
+
+model_param:
+  img_size: 32
+  patch_size: 4
+  num_classes: 64
+  global_pool: ""
+  embed_dim: 192
+  depth: 12
+  num_heads: 12
+  mlp_ratio: 2
+  class_token: False
+
+optim:
+  optim_name: Adam
+  optim_param:
+    lr: 0.001
+    weight_decay: 0.00005
+
+scheduler:
+  # scheduler_name: MultiStepLR
+  # scheduler_param:
+  #   milestones: [10, 30]
+  #   gamma: 0.1
+  scheduler_name: CosineAnnealingLR
+  scheduler_param:
+    T_max: 100
+  use_warmup: True
+  warmup_param:
+    multiplier: 1
+    total_epoch: 3
+
+mode: pretrain
+
+data:
+  data_dir: ./
+  dataset: None
+  train_batch_size: 128
+  test_batch_size: 128
+  val_batch_size: 128
+  num_workers: 0
